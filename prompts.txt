@@ -1,0 +1,82 @@
+=== Prompt 1: Architecture and Project Design ===
+
+I want to create a Python application named Web Security Scanner using Python 3.12 and Flask.
+
+The application should follow the Model-View-Controller (MVC) architecture to separate concerns. Use Jinja2 templates for the views, Python modules for the controllers and scanner logic, and SQLite for persistent storage.
+
+The application should be a web-based dashboard that allows users to scan locally hosted web applications for common security vulnerabilities.
+
+The user should be able to enter a target URL, initiate a scan, view scan results, review previous scans, and download security reports.
+
+I want you to act as a software architect.
+
+Design a beginner-friendly and modular project architecture.
+
+Propose the following:
+
+1. Complete project directory structure.
+2. Responsibilities of each Python module.
+3. MVC architecture and component communication.
+4. SQLite database schema.
+5. Scanner architecture.
+6. Dashboard design.
+7. Security controls.
+8. Application execution flow.
+9. Testing strategy.
+
+The application should support OWASP Juice Shop running locally at http://127.0.0.1:3000 as its primary testing target.
+
+Security requirements:
+- Restrict scanning to localhost and private network addresses by default.
+- Implement strict URL validation and SSRF protection.
+- Validate redirect destinations.
+- Apply HTTP request timeouts and response size limits.
+- Escape user-controlled content.
+- Never execute destructive payloads or exploit vulnerabilities.
+- Never scan external websites by default.
+
+DO NOT write application code yet.
+
+Present the architecture and wait for approval before proceeding.
+
+
+=== Prompt 2: Scanner Implementation and Security Improvements ===
+
+Implement the Web Security Scanner application based on the approved architecture.
+
+Create the complete Model-View-Controller (MVC) project structure:
+1. Core configuration (config.py) enforcing HTTP timeouts, response size limits, allowed IP ranges, and SQLite database settings.
+2. Database initialization (schema.sql, models/db.py) and data models (models/scan_model.py, models/vulnerability_model.py).
+3. Security scanner modules:
+   - scanner/validator.py: SSRF protection, loopback/private subnet restrictions, scheme validation.
+   - scanner/http_client.py: Safe HTTP client enforcing request timeouts, max response size, and safe redirect validation.
+   - scanner/modules/: Modular security checks including headers check, sensitive file exposure check, passive SQL injection probing, and passive XSS probing.
+   - scanner/engine.py: Scanner orchestrator running enabled security modules against target URLs and persisting findings.
+4. Flask Blueprints & Controllers (controllers/dashboard_controller.py, controllers/scan_controller.py, controllers/report_controller.py).
+5. Jinja2 templates for dashboard, scan details, scan history, and static CSS/JS assets.
+6. Initial unit test suite for validator and scanner logic.
+
+
+=== Prompt 3: Dashboard Improvements, Testing, Documentation, and Final Verification ===
+
+Finish and polish the existing Web Security Scanner application.
+
+Do not rebuild the application or remove working features.
+
+Improve the existing dashboard with a professional cybersecurity design.
+
+Make sure users can scan targets, view results, and browse scan history.
+
+Ensure HTML and JSON report downloads work. Preserve CSV exports.
+
+Add any missing pytest tests for the scanner, security protections, database, routes, and reports.
+
+Create or update README.md with installation, startup, scanning, testing, and security instructions.
+
+Update .gitignore if necessary.
+
+Finally, run all tests, fix failures, and verify the application works with OWASP Juice Shop at http://127.0.0.1:3000.
+
+Keep all existing security protections. Do not claim tests passed unless they actually pass.
+
+Summarize the changes and provide the commands to run the application and tests.
