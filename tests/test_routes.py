@@ -20,7 +20,7 @@ class TestApplicationRoutes(unittest.TestCase):
     def test_dashboard_index(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Launch Security Scan", response.data)
+        self.assertIn(b"Initiate Security Assessment", response.data)
 
     def test_start_scan_invalid_url(self):
         response = self.client.post('/scan/start', data={'target_url': 'http://8.8.8.8'}, follow_redirects=True)
@@ -30,7 +30,7 @@ class TestApplicationRoutes(unittest.TestCase):
     def test_history_page(self):
         response = self.client.get('/scans')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Scan History", response.data)
+        self.assertIn(b"Assessment History", response.data)
 
 if __name__ == '__main__':
     unittest.main()

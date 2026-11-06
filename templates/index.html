@@ -3,19 +3,22 @@
 <div class="row mb-4">
     <div class="col-md-12">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h5 class="card-title mb-0">Launch Security Scan</h5>
+            <div class="card-header bg-dark border-bottom border-secondary text-info">
+                <h5 class="card-title mb-0 fw-bold">🚀 Initiate Security Assessment</h5>
             </div>
             <div class="card-body">
                 <form action="{{ url_for('scan.start_scan') }}" method="POST">
                     <div class="mb-3">
-                        <label for="target_url" class="form-label">Target URL</label>
-                        <input type="url" class="form-control" id="target_url" name="target_url" value="{{ default_target }}" required>
-                        <div class="form-text">
-                            Restricted to loopback (127.0.0.1) and private subnets. Primary target: <code>http://127.0.0.1:3000</code>.
+                        <label for="target_url" class="form-label text-light fw-bold">Target Application URL</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-secondary text-white border-secondary">URL</span>
+                            <input type="url" class="form-control bg-dark text-white border-secondary" id="target_url" name="target_url" value="{{ default_target }}" required>
+                            <button type="submit" class="btn btn-info fw-bold">Start Scan</button>
+                        </div>
+                        <div class="form-text text-muted mt-2">
+                            🔒 Restrictive Security Control: Scans are limited to loopback (<code>127.0.0.1</code>) and private subnets. Primary target: <code>http://127.0.0.1:3000</code>.
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Start Non-Destructive Scan</button>
                 </form>
             </div>
         </div>
@@ -25,36 +28,43 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">Recent Scans</h5>
+            <div class="card-header bg-dark border-bottom border-secondary d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0 text-light fw-bold">Recent Assessment Runs</h5>
+                <a href="{{ url_for('scan.scan_history') }}" class="btn btn-sm btn-outline-info">View All</a>
             </div>
             <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Target URL</th>
-                            <th>Status</th>
-                            <th>Vulnerabilities</th>
-                            <th>Started At</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for scan in scans[:5] %}
-                        <tr>
-                            <td>#{{ scan.id }}</td>
-                            <td><code>{{ scan.target_url }}</code></td>
-                            <td><span class="badge bg-{{ 'success' if scan.status == 'completed' else 'danger' if scan.status == 'failed' else 'secondary' }}">{{ scan.status }}</span></td>
-                            <td><span class="badge bg-warning text-dark">{{ scan.total_vulnerabilities }}</span></td>
-                            <td>{{ scan.start_time }}</td>
-                            <td><a href="{{ url_for('scan.view_scan', scan_id=scan.id) }}" class="btn btn-sm btn-outline-primary">View</a></td>
-                        </tr>
-                        {% else %}
-                        <tr><td colspan="6" class="text-center py-3 text-muted">No scans run yet.</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead>
+                            <tr class="text-muted">
+                                <th>Scan ID</th>
+                                <th>Target Endpoint</th>
+                                <th>Status</th>
+                                <th>Vulnerabilities</th>
+                                <th>Started At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for scan in scans[:5] %}
+                            <tr>
+                                <td class="font-monospace">#{{ scan.id }}</td>
+                                <td><code>{{ scan.target_url }}</code></td>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if scan.status == 'completed' else 'danger' if scan.status == 'failed' else 'secondary' }}">
+                                        {{ scan.status | upper }}
+                                    </span>
+                                </td>
+                                <td><span class="badge bg-warning text-dark">{{ scan.total_vulnerabilities }}</span></td>
+                                <td class="text-muted fs-7">{{ scan.start_time }}</td>
+                                <td><a href="{{ url_for('scan.view_scan', scan_id=scan.id) }}" class="btn btn-sm btn-outline-info">Results</a></td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="6" class="text-center py-4 text-muted">No historical scan runs found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
