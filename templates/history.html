@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">Scan History</h2>
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Target</th>
+                    <th>Status</th>
+                    <th>Vulnerabilities</th>
+                    <th>Timestamp</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for scan in scans %}
+                <tr>
+                    <td>#{{ scan.id }}</td>
+                    <td><code>{{ scan.target_url }}</code></td>
+                    <td><span class="badge bg-{{ 'success' if scan.status == 'completed' else 'danger' }}">{{ scan.status }}</span></td>
+                    <td><span class="badge bg-warning text-dark">{{ scan.total_vulnerabilities }}</span></td>
+                    <td>{{ scan.start_time }}</td>
+                    <td>
+                        <a href="{{ url_for('scan.view_scan', scan_id=scan.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                        <form action="{{ url_for('scan.delete_scan', scan_id=scan.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete scan record?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" class="text-center py-3 text-muted">No historical scans found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
